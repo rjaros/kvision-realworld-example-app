@@ -10,7 +10,13 @@
 .classpath
 *.launch
 .settings/
-
+.*/
+build/
+out/
+*.imp
+*.ipr
+*.iws
+*.idea
 
 #System Files
 .DS_Store
