@@ -1,4 +1,4 @@
-# <img src="kvision-logo.png" width="130" height="100"> Realworld - KVision example app
+# <img src="https://raw.githubusercontent.com/rjaros/kvision-realworld-example-app/master/kvision-logo.png" width="130" height="100"> Realworld - KVision example app
 
 [![RealWorld Frontend](https://img.shields.io/badge/realworld-frontend-%23783578.svg)](http://realworld.io)
 
