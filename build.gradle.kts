@@ -79,24 +79,8 @@ kotlin {
         implementation(npm("grunt-pot"))
 
         implementation("pl.treksoft:kvision:$kvisionVersion")
-        implementation("pl.treksoft:kvision-bootstrap:$kvisionVersion")
-        implementation("pl.treksoft:kvision-bootstrap-css:$kvisionVersion")
-        implementation("pl.treksoft:kvision-bootstrap-datetime:$kvisionVersion")
-        implementation("pl.treksoft:kvision-bootstrap-select:$kvisionVersion")
-        implementation("pl.treksoft:kvision-bootstrap-spinner:$kvisionVersion")
-        implementation("pl.treksoft:kvision-bootstrap-upload:$kvisionVersion")
-        implementation("pl.treksoft:kvision-bootstrap-dialog:$kvisionVersion")
         implementation("pl.treksoft:kvision-fontawesome:$kvisionVersion")
-        implementation("pl.treksoft:kvision-i18n:$kvisionVersion")
-        implementation("pl.treksoft:kvision-richtext:$kvisionVersion")
-        implementation("pl.treksoft:kvision-handlebars:$kvisionVersion")
-        implementation("pl.treksoft:kvision-datacontainer:$kvisionVersion")
-        implementation("pl.treksoft:kvision-redux:$kvisionVersion")
-        implementation("pl.treksoft:kvision-chart:$kvisionVersion")
-        implementation("pl.treksoft:kvision-tabulator:$kvisionVersion")
-        implementation("pl.treksoft:kvision-pace:$kvisionVersion")
-        implementation("pl.treksoft:kvision-moment:$kvisionVersion")
-        implementation("pl.treksoft:kvision-toast:$kvisionVersion")
+        implementation("pl.treksoft:kvision-redux-kotlin:$kvisionVersion")
     }
     sourceSets["test"].dependencies {
         implementation(kotlin("test-js"))
@@ -115,18 +99,6 @@ fun getNodeJsBinaryExecutable(): String {
 }
 
 tasks {
-    withType<org.jetbrains.kotlin.gradle.targets.js.npm.tasks.KotlinNpmInstallTask> {
-        doLast {
-            yarnLock.parentFile.resolve("package.json").apply {
-                writeText(readText().replace(
-                    "\"dependencies\": {},",
-                    "\"dependencies\": {},\n  \"resolutions\": { \"moment\": \"2.24.0\", \"jquery\": \"3.4.1\" },"
-                ))
-            }
-            org.jetbrains.kotlin.gradle.targets.js.yarn.YarnWorkspaces()
-                .yarnExec(project, yarnLock.parentFile, "Relaunching Yarn to fix resolutions")
-        }
-    }
     withType<KotlinJsDce> {
         doLast {
             copy {

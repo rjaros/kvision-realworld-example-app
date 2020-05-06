@@ -16,4 +16,4 @@ pluginManagement {
         }
     }
 }
-rootProject.name = "template"
+rootProject.name = "kvision-realworld-example-app"
