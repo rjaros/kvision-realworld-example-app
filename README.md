@@ -1,4 +1,4 @@
-# <img src="https://raw.githubusercontent.com/rjaros/kvision-realworld-example-app/master/kvision-logo.png" width="130" height="100"> Realworld - KVision example app
+# ![RealWorld Example App](kvision-logo.png)
 
 [![RealWorld Frontend](https://img.shields.io/badge/realworld-frontend-%23783578.svg)](http://realworld.io)
 
@@ -12,19 +12,23 @@ We've gone to great lengths to adhere to the [KVision](https://github.com/rjaros
 
 For more information on how to this works with other frontends/backends, head over to the [RealWorld](https://github.com/gothinkster/realworld) repo.
 
-
 # How it works
 
-> Describe the general architecture of your app here
+Created with [KVision](https://github.com/rjaros/kvision) and written in pure Kotlin/JS.
 
 # Getting started
 
+Make sure you have JDK 8 or higher installed.
+
+Run Gradle build with `./gradlew` / `gradlew.bat` command.
+
 ## Gradle Tasks
-Whenever you want to produce a minified "production" version of your code pass in `-Pproduction=true` or `-Pprod=true` to your build command.
-### Resource Processing
-* generatePotFile - Generates a `src/main/resources/i18n/messages.pot` translation template file.
+
 ### Running
-* run - Starts a webpack dev server on port 3000.
+* `./gradlew -t run` - Starts a webpack dev server on port 3000. Open http://localhost:3000 in a browser.
+
 ### Packaging
-* browserWebpack - Bundles the compiled js files into `build/distributions`
-* zip - Packages a zip archive with all required files into `build/libs/*.zip`
+* `./gradlew -Pprod=true zip` - Packages a minified production version in a zip archive with all required files into `build/libs/*.zip`.
+
+### Testing
+* `./gradlew test` - Run unit tests defined in `src/test/kotlin` source files. Test reports are generated into `build/reports/tests/test`.  
