@@ -16,7 +16,7 @@ class HeaderSpec : DomSpec {
     fun headerForUnauthorizedUserTest() {
         run {
             val root = Root("test")
-            root.headerNav(ConduitState(View.HOME))
+            root.headerNav(ConduitState(appLoading = false))
             val element = root.getElementJQuery()
             assertNotNull(element, "Generated content should not be empty")
             val links = element.find("a")
@@ -36,7 +36,7 @@ class HeaderSpec : DomSpec {
     fun headerForAuthorizedUserWithoutImageTest() {
         run {
             val root = Root("test")
-            root.headerNav(ConduitState(View.HOME, user = User("test@gmail.com", username = "testuser")))
+            root.headerNav(ConduitState(appLoading = false, user = User("test@gmail.com", username = "testuser")))
             val element = root.getElementJQuery()
             assertNotNull(element, "Generated content should not be empty")
             val links = element.find("a")
@@ -69,8 +69,7 @@ class HeaderSpec : DomSpec {
         run {
             val root = Root("test")
             root.headerNav(
-                ConduitState(
-                    View.HOME,
+                ConduitState(appLoading = false,
                     user = User("test@gmail.com", username = "testuser", image = "https://google.com")
                 )
             )
