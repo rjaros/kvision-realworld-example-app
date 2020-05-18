@@ -79,6 +79,8 @@ kotlin {
         implementation(npm("grunt"))
         implementation(npm("grunt-pot"))
 
+        implementation(npm("marked", "^0.6.3"))
+
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:$coroutinesVersion")
         implementation("pl.treksoft:kvision:$kvisionVersion")
         implementation("pl.treksoft:kvision-redux-kotlin:$kvisionVersion")

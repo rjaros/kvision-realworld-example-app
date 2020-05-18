@@ -3,7 +3,7 @@ package test.io.realworld
 import io.realworld.ConduitState
 import io.realworld.User
 import io.realworld.View
-import io.realworld.headerNav
+import io.realworld.layout.headerNav
 import pl.treksoft.kvision.panel.Root
 import pl.treksoft.kvision.test.DomSpec
 import kotlin.test.Test

@@ -1,5 +1,6 @@
-package io.realworld
+package io.realworld.layout
 
+import io.realworld.View
 import pl.treksoft.kvision.core.Container
 import pl.treksoft.kvision.html.div
 import pl.treksoft.kvision.html.footer

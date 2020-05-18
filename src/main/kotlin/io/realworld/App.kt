@@ -1,5 +1,11 @@
 package io.realworld
 
+import io.realworld.layout.article
+import io.realworld.layout.footer
+import io.realworld.layout.headerNav
+import io.realworld.layout.homePage
+import io.realworld.layout.loginPage
+import io.realworld.layout.profilePage
 import pl.treksoft.kvision.Application
 import pl.treksoft.kvision.html.header
 import pl.treksoft.kvision.html.main
@@ -28,18 +34,26 @@ class App : Application() {
             }
             main {
                 bind(ConduitManager.conduitStore) { state ->
-                    when (state.view) {
-                        View.HOME -> {
+                    if (!state.appLoading) {
+                        when (state.view) {
+                            View.HOME -> {
+                                homePage(state)
+                            }
+                            View.ARTICLE -> {
+                                article(state)
+                            }
+                            View.PROFILE -> {
+                                profilePage(state)
+                            }
+                            View.LOGIN -> {
+                                loginPage(state)
+                            }
+                            View.REGISTER -> {
 
+                            }
+                            View.EDITOR -> TODO()
+                            View.SETTINGS -> TODO()
                         }
-                        View.LOGIN -> {
-                            loginPage(state)
-                        }
-                        View.REGISTER -> {
-
-                        }
-                        View.EDITOR -> TODO()
-                        View.SETTINGS -> TODO()
                     }
                 }
             }
