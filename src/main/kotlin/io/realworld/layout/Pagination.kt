@@ -9,10 +9,11 @@ import pl.treksoft.kvision.html.nav
 import pl.treksoft.kvision.html.ul
 
 fun Container.pagination(state: ConduitState) {
-    if (state.articlesCount > 10) {
+    val limit = state.pageSize
+    if (state.articlesCount > limit) {
         nav {
             ul(className = "pagination") {
-                val numberOfPages = ((state.articlesCount - 1) / 10) + 1
+                val numberOfPages = ((state.articlesCount - 1) / limit) + 1
                 for (page in 0 until numberOfPages) {
                     val className = if (page == state.selectedPage) "page-item active" else "page-item"
                     li(className = className) {

@@ -57,13 +57,14 @@ object ConduitManager : CoroutineScope by CoroutineScope(Dispatchers.Default + S
         conduitStore.dispatch(ConduitAction.ArticlesLoading)
         withProgress {
             val state = conduitStore.getState()
-            val offset = state.selectedPage * 10
+            val limit = state.pageSize
+            val offset = state.selectedPage * limit
             val articleDto = when (state.feedType) {
-                FeedType.USER -> Api.feed(offset)
-                FeedType.GLOBAL -> Api.articles(null, null, null, offset, 10)
-                FeedType.TAG -> Api.articles(state.selectedTag, null, null, offset, 10)
-                FeedType.PROFILE -> Api.articles(null, state.profile?.username, null, offset, 5)
-                FeedType.PROFILE_FAVORITED -> Api.articles(null, null, state.profile?.username, offset, 5)
+                FeedType.USER -> Api.feed(offset, limit)
+                FeedType.GLOBAL -> Api.articles(null, null, null, offset, limit)
+                FeedType.TAG -> Api.articles(state.selectedTag, null, null, offset, limit)
+                FeedType.PROFILE -> Api.articles(null, state.profile?.username, null, offset, limit)
+                FeedType.PROFILE_FAVORITED -> Api.articles(null, null, state.profile?.username, offset, limit)
             }
             conduitStore.dispatch(ConduitAction.ArticlesLoaded(articleDto.articles, articleDto.articlesCount))
         }
@@ -150,6 +151,22 @@ object ConduitManager : CoroutineScope by CoroutineScope(Dispatchers.Default + S
         }
     }
 
+    fun editorPage() {
+        conduitStore.dispatch(ConduitAction.EditorPage)
+    }
+
+    fun createArticle(title: String?, description: String?, body: String?, tags: String?) {
+        withProgress {
+            try {
+                val tagList = tags?.split(" ")?.toList() ?: emptyList()
+                val article = Api.createArticle(title, description, body, tagList)
+                routing.navigate(View.ARTICLE.url + "/" + article.slug)
+            } catch (e: Exception) {
+                conduitStore.dispatch(ConduitAction.EditorError(title, description, body, tags, parseErrors(e.message)))
+            }
+        }
+    }
+
     fun loginPage() {
         conduitStore.dispatch(ConduitAction.LoginPage)
     }
@@ -166,7 +183,7 @@ object ConduitManager : CoroutineScope by CoroutineScope(Dispatchers.Default + S
                 saveJwtToken(user.token!!)
                 routing.navigate(View.HOME.url)
             } catch (e: Exception) {
-                conduitStore.dispatch(ConduitAction.LoginError)
+                conduitStore.dispatch(ConduitAction.LoginError(parseErrors(e.message)))
             }
         }
     }
@@ -175,6 +192,36 @@ object ConduitManager : CoroutineScope by CoroutineScope(Dispatchers.Default + S
         deleteJwtToken()
         conduitStore.dispatch(ConduitAction.Logout)
         routing.navigate(View.HOME.url)
+    }
+
+    fun settingsPage() {
+        conduitStore.dispatch(ConduitAction.SettingsPage)
+    }
+
+    fun settings(image: String?, username: String?, bio: String?, email: String?, password: String?) {
+        withProgress {
+            try {
+                val user = Api.settings(image, username, bio, email, password)
+                conduitStore.dispatch(ConduitAction.Login(user))
+                saveJwtToken(user.token!!)
+                routing.navigate("${View.PROFILE.url}${user.username}")
+            } catch (e: Exception) {
+                conduitStore.dispatch(ConduitAction.SettingsError(parseErrors(e.message)))
+            }
+        }
+    }
+
+    fun register(username: String?, email: String?, password: String?) {
+        withProgress {
+            try {
+                val user = Api.register(username, email, password)
+                conduitStore.dispatch(ConduitAction.Login(user))
+                saveJwtToken(user.token!!)
+                routing.navigate(View.HOME.url)
+            } catch (e: Exception) {
+                conduitStore.dispatch(ConduitAction.RegisterError(username, email, parseErrors(e.message)))
+            }
+        }
     }
 
     private fun saveJwtToken(token: String) {
@@ -187,5 +234,22 @@ object ConduitManager : CoroutineScope by CoroutineScope(Dispatchers.Default + S
 
     fun getJwtToken(): String? {
         return localStorage[JWT_TOKEN]
+    }
+
+    private fun parseErrors(message: String?): List<String> {
+        return message?.let {
+            try {
+                val result = mutableListOf<String>()
+                val json = JSON.parse<dynamic>(it)
+                val errors = json.errors
+                for (key in js("Object").keys(errors)) {
+                    val tab: Array<String> = errors[key]
+                    result.addAll(tab.map { key + " " + it })
+                }
+                result
+            } catch (e: Exception) {
+                listOf("unknown error")
+            }
+        } ?: listOf("unknown error")
     }
 }

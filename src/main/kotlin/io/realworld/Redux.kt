@@ -13,7 +13,6 @@ enum class FeedType {
 data class ConduitState(
     val appLoading: Boolean = true,
     val view: View = View.HOME,
-    val loginError: Boolean = false,
     val user: User? = null,
     val articlesLoading: Boolean = false,
     val articles: List<Article>? = null,
@@ -25,8 +24,33 @@ data class ConduitState(
     val selectedTag: String? = null,
     val profile: User? = null,
     val tagsLoading: Boolean = false,
-    val tags: List<String>? = null
-)
+    val tags: List<String>? = null,
+    val editorErrors: List<String>? = null,
+    val editorTitle: String? = null,
+    val editorDescription: String? = null,
+    val editorBody: String? = null,
+    val editorTags: String? = null,
+    val loginErrors: List<String>? = null,
+    val settingsErrors: List<String>? = null,
+    val registerErrors: List<String>? = null,
+    val registerUserName: String? = null,
+    val registerEmail: String? = null
+) {
+    val pageSize = when (feedType) {
+        FeedType.USER, FeedType.GLOBAL, FeedType.TAG -> 10
+        FeedType.PROFILE, FeedType.PROFILE_FAVORITED -> 5
+    }
+
+    private fun linkClassName(view: View) = if (this.view == view) "nav-link active" else "nav-link"
+
+    val homeLinkClassName = linkClassName(View.HOME)
+    val loginLinkClassName = linkClassName(View.LOGIN)
+    val registerLinkClassName = linkClassName(View.REGISTER)
+    val editorLinkClassName = linkClassName(View.EDITOR)
+    val settingsLinkClassName = linkClassName(View.SETTINGS)
+    val profileLinkClassName =
+        if (view == View.PROFILE && profile?.username == user?.username) "nav-link active" else "nav-link"
+}
 
 sealed class ConduitAction : RAction {
     object AppLoaded : ConduitAction()
@@ -54,10 +78,25 @@ sealed class ConduitAction : RAction {
     data class AddComment(val comment: Comment) : ConduitAction()
     data class DeleteComment(val id: Int) : ConduitAction()
 
+    object EditorPage : ConduitAction()
+    data class EditorError(
+        val title: String?,
+        val description: String?,
+        val body: String?,
+        val tags: String?,
+        val errors: List<String>
+    ) : ConduitAction()
+
     object LoginPage : ConduitAction()
-    object RegisterPage : ConduitAction()
     data class Login(val user: User) : ConduitAction()
-    object LoginError : ConduitAction()
+    data class LoginError(val errors: List<String>) : ConduitAction()
+
+    object SettingsPage : ConduitAction()
+    data class SettingsError(val errors: List<String>) : ConduitAction()
+
+    object RegisterPage : ConduitAction()
+    data class RegisterError(val username: String?, val email: String?, val errors: List<String>) : ConduitAction()
+
     object Logout : ConduitAction()
 }
 
@@ -126,17 +165,45 @@ fun conduitReducer(state: ConduitState, action: ConduitAction): ConduitState = w
     is ConduitAction.DeleteComment -> {
         state.copy(articleComments = state.articleComments?.filterNot { it.id == action.id })
     }
-    is ConduitAction.LoginPage -> {
-        state.copy(view = View.LOGIN)
+    is ConduitAction.EditorPage -> {
+        state.copy(
+            view = View.EDITOR,
+            editorErrors = null,
+            editorTitle = null,
+            editorDescription = null,
+            editorBody = null,
+            editorTags = null
+        )
     }
-    is ConduitAction.RegisterPage -> {
-        state.copy(view = View.REGISTER)
+    is ConduitAction.EditorError -> {
+        state.copy(
+            editorErrors = action.errors,
+            editorTitle = action.title,
+            editorDescription = action.description,
+            editorBody = action.body,
+            editorTags = action.tags
+        )
+    }
+    is ConduitAction.LoginPage -> {
+        state.copy(view = View.LOGIN, loginErrors = null)
     }
     is ConduitAction.Login -> {
         state.copy(user = action.user)
     }
     is ConduitAction.LoginError -> {
-        state.copy(user = null, loginError = true)
+        state.copy(user = null, loginErrors = action.errors)
+    }
+    is ConduitAction.SettingsPage -> {
+        state.copy(view = View.SETTINGS, settingsErrors = null)
+    }
+    is ConduitAction.SettingsError -> {
+        state.copy(settingsErrors = action.errors)
+    }
+    is ConduitAction.RegisterPage -> {
+        state.copy(view = View.REGISTER, registerErrors = null, registerUserName = null, registerEmail = null)
+    }
+    is ConduitAction.RegisterError -> {
+        state.copy(registerErrors = action.errors, registerUserName = action.username, registerEmail = action.email)
     }
     is ConduitAction.Logout -> {
         ConduitState(appLoading = false)

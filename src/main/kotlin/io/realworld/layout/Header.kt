@@ -17,14 +17,14 @@ fun Container.headerNav(state: ConduitState) {
             if (!state.appLoading) {
                 ul(className = "nav navbar-nav pull-xs-right") {
                     li(className = "nav-item") {
-                        link("Home", "#${View.HOME.url}", className = "nav-link active")
+                        link("Home", "#${View.HOME.url}", className = state.homeLinkClassName)
                     }
                     if (state.user == null) {
                         li(className = "nav-item") {
-                            link("Sign in", "#${View.LOGIN.url}", className = "nav-link")
+                            link("Sign in", "#${View.LOGIN.url}", className = state.loginLinkClassName)
                         }
                         li(className = "nav-item") {
-                            link("Sign up", "#${View.REGISTER.url}", className = "nav-link")
+                            link("Sign up", "#${View.REGISTER.url}", className = state.registerLinkClassName)
                         }
                     } else {
                         li(className = "nav-item") {
@@ -33,7 +33,7 @@ fun Container.headerNav(state: ConduitState) {
                                 "#${View.EDITOR.url}",
                                 "ion-compose",
                                 separator = "&nbsp;",
-                                className = "nav-link"
+                                className = state.editorLinkClassName
                             )
                         }
                         li(className = "nav-item") {
@@ -42,7 +42,7 @@ fun Container.headerNav(state: ConduitState) {
                                 "#${View.SETTINGS.url}",
                                 "ion-gear-a",
                                 separator = "&nbsp;",
-                                className = "nav-link"
+                                className = state.settingsLinkClassName
                             )
                         }
                         if (state.user.username != null) {
@@ -51,7 +51,7 @@ fun Container.headerNav(state: ConduitState) {
                                     state.user.username,
                                     "#/@${state.user.username}",
                                     labelFirst = false,
-                                    className = "nav-link"
+                                    className = state.profileLinkClassName
                                 ) {
                                     if (!state.user.image.isNullOrBlank()) {
                                         image(state.user.image, state.user.username, className = "user-pic")

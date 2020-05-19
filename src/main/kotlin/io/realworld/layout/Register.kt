@@ -18,24 +18,35 @@ import pl.treksoft.kvision.html.link
 import pl.treksoft.kvision.html.p
 import pl.treksoft.kvision.html.ul
 
-fun Container.loginPage(state: ConduitState) {
+fun Container.registerPage(state: ConduitState) {
     div(className = "auth-page") {
         div(className = "container page") {
             div(className = "row") {
                 div(className = "col-md-6 offset-md-3 col-xs-12") {
-                    h1("Sign in", className = "text-xs-center")
+                    h1("Sign up", className = "text-xs-center")
                     p(className = "text-xs-center") {
-                        link("Need an account?", "#${View.REGISTER.url}")
+                        link("Have an account?", "#${View.LOGIN.url}")
                     }
-                    if (!state.loginErrors.isNullOrEmpty()) {
-                        ul(state.loginErrors, className = "error-messages")
+                    if (!state.registerErrors.isNullOrEmpty()) {
+                        ul(state.registerErrors, className = "error-messages")
                     }
+                    lateinit var usernameInput: TextInput
                     lateinit var emailInput: TextInput
                     lateinit var passwordInput: TextInput
                     form {
                         fieldset(className = "form-group") {
+                            usernameInput =
+                                textInput(value = state.registerUserName, className = "form-control form-control-lg") {
+                                    placeholder = "Your Name"
+                                }
+                        }
+                        fieldset(className = "form-group") {
                             emailInput =
-                                textInput(type = TextInputType.EMAIL, className = "form-control form-control-lg") {
+                                textInput(
+                                    TextInputType.EMAIL,
+                                    state.registerEmail,
+                                    className = "form-control form-control-lg"
+                                ) {
                                     placeholder = "Email"
                                 }
                         }
@@ -46,14 +57,14 @@ fun Container.loginPage(state: ConduitState) {
                                 }
                         }
                         button(
-                            "Sign in",
+                            "Sign up",
                             type = ButtonType.SUBMIT,
                             className = "btn-lg pull-xs-right"
                         )
                     }.onEvent {
                         submit = { ev ->
                             ev.preventDefault()
-                            ConduitManager.login(emailInput.value, passwordInput.value)
+                            ConduitManager.register(usernameInput.value, emailInput.value, passwordInput.value)
                         }
                     }
                 }

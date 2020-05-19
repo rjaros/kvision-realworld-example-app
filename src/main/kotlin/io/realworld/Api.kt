@@ -27,6 +27,14 @@ object Api {
         ).await().user
     }
 
+    suspend fun register(username: String?, email: String?, password: String?): User {
+        return restClient.call<UserDto, UserDto>(
+            "$API_URL/users",
+            UserDto(User(username = username, email = email, password = password)),
+            HttpMethod.POST
+        ).await().user
+    }
+
     suspend fun user(): User {
         return restClient.call<UserDto>(
             "$API_URL/user",
@@ -54,10 +62,10 @@ object Api {
         ).await()
     }
 
-    suspend fun feed(offset: Int = 0): ArticlesDto {
+    suspend fun feed(offset: Int = 0, limit: Int = 10): ArticlesDto {
         return restClient.call<ArticlesDto, FeedQuery>(
             "$API_URL/articles/feed",
-            FeedQuery(offset),
+            FeedQuery(offset, limit),
             beforeSend = ::authRequest
         ).await()
     }
@@ -116,5 +124,22 @@ object Api {
         ).await()
     }
 
+    suspend fun createArticle(title: String?, description: String?, body: String?, tags: List<String>): Article {
+        return restClient.call<ArticleDto, ArticleDto>(
+            "$API_URL/articles",
+            ArticleDto(Article(title = title, description = description, body = body, tagList = tags)),
+            method = HttpMethod.POST,
+            beforeSend = ::authRequest
+        ).await().article
+    }
+
+    suspend fun settings(image: String?, username: String?, bio: String?, email: String?, password: String?): User {
+        return restClient.call<UserDto, UserDto>(
+            "$API_URL/user",
+            UserDto(User(image = image, username = username, bio = bio, email = email, password = password)),
+            HttpMethod.PUT,
+            beforeSend = ::authRequest
+        ).await().user
+    }
 
 }

@@ -27,7 +27,9 @@ fun Navigo.initialize(): Navigo {
     }).on(View.REGISTER.url, { _ ->
         ConduitManager.registerPage()
     }).on(View.EDITOR.url, { _ ->
+        ConduitManager.editorPage()
     }).on(View.SETTINGS.url, { _ ->
+        ConduitManager.settingsPage()
     })
 }
 

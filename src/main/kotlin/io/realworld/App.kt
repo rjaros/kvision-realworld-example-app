@@ -1,11 +1,14 @@
 package io.realworld
 
 import io.realworld.layout.article
+import io.realworld.layout.editorPage
 import io.realworld.layout.footer
 import io.realworld.layout.headerNav
 import io.realworld.layout.homePage
 import io.realworld.layout.loginPage
 import io.realworld.layout.profilePage
+import io.realworld.layout.registerPage
+import io.realworld.layout.settingsPage
 import pl.treksoft.kvision.Application
 import pl.treksoft.kvision.html.header
 import pl.treksoft.kvision.html.main
@@ -49,10 +52,14 @@ class App : Application() {
                                 loginPage(state)
                             }
                             View.REGISTER -> {
-
+                                registerPage(state)
                             }
-                            View.EDITOR -> TODO()
-                            View.SETTINGS -> TODO()
+                            View.EDITOR -> {
+                                editorPage(state)
+                            }
+                            View.SETTINGS -> {
+                                settingsPage(state)
+                            }
                         }
                     }
                 }
