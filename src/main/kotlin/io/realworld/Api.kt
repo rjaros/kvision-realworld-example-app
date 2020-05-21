@@ -1,5 +1,6 @@
 package io.realworld
 
+import io.realworld.model.*
 import kotlinx.coroutines.await
 import pl.treksoft.jquery.JQueryAjaxSettings
 import pl.treksoft.jquery.JQueryXHR
@@ -22,7 +23,12 @@ object Api {
     suspend fun login(email: String?, password: String?): User {
         return restClient.call<UserDto, UserDto>(
             "$API_URL/users/login",
-            UserDto(User(email = email, password = password)),
+            UserDto(
+                User(
+                    email = email,
+                    password = password
+                )
+            ),
             HttpMethod.POST
         ).await().user
     }
@@ -30,7 +36,13 @@ object Api {
     suspend fun register(username: String?, email: String?, password: String?): User {
         return restClient.call<UserDto, UserDto>(
             "$API_URL/users",
-            UserDto(User(username = username, email = email, password = password)),
+            UserDto(
+                User(
+                    username = username,
+                    email = email,
+                    password = password
+                )
+            ),
             HttpMethod.POST
         ).await().user
     }
@@ -38,6 +50,23 @@ object Api {
     suspend fun user(): User {
         return restClient.call<UserDto>(
             "$API_URL/user",
+            beforeSend = ::authRequest
+        ).await().user
+    }
+
+    suspend fun settings(image: String?, username: String?, bio: String?, email: String?, password: String?): User {
+        return restClient.call<UserDto, UserDto>(
+            "$API_URL/user",
+            UserDto(
+                User(
+                    image = image,
+                    username = username,
+                    bio = bio,
+                    email = email,
+                    password = password
+                )
+            ),
+            HttpMethod.PUT,
             beforeSend = ::authRequest
         ).await().user
     }
@@ -84,6 +113,23 @@ object Api {
         ).await().comments
     }
 
+    suspend fun articleComment(slug: String, comment: String?): Comment {
+        return restClient.call<CommentDto, CommentDto>(
+            "$API_URL/articles/$slug/comments",
+            CommentDto(Comment(body = comment)),
+            method = HttpMethod.POST,
+            beforeSend = ::authRequest
+        ).await().comment
+    }
+
+    suspend fun articleCommentDelete(slug: String, id: Int) {
+        restClient.remoteCall(
+            "$API_URL/articles/$slug/comments/$id",
+            method = HttpMethod.DELETE,
+            beforeSend = ::authRequest
+        ).await()
+    }
+
     suspend fun articleFavorite(slug: String, favorite: Boolean = true): Article {
         return restClient.call<ArticleDto>(
             "$API_URL/articles/$slug/favorite",
@@ -107,39 +153,50 @@ object Api {
         ).await().profile
     }
 
-    suspend fun articleComment(slug: String, comment: String?): Comment {
-        return restClient.call<CommentDto, CommentDto>(
-            "$API_URL/articles/$slug/comments",
-            CommentDto(Comment(body = comment)),
-            method = HttpMethod.POST,
-            beforeSend = ::authRequest
-        ).await().comment
-    }
-
-    suspend fun articleCommentDelete(slug: String, id: Int) {
-        restClient.remoteCall(
-            "$API_URL/articles/$slug/comments/$id",
-            method = HttpMethod.DELETE,
-            beforeSend = ::authRequest
-        ).await()
-    }
-
     suspend fun createArticle(title: String?, description: String?, body: String?, tags: List<String>): Article {
         return restClient.call<ArticleDto, ArticleDto>(
             "$API_URL/articles",
-            ArticleDto(Article(title = title, description = description, body = body, tagList = tags)),
+            ArticleDto(
+                Article(
+                    title = title,
+                    description = description,
+                    body = body,
+                    tagList = tags
+                )
+            ),
             method = HttpMethod.POST,
             beforeSend = ::authRequest
         ).await().article
     }
 
-    suspend fun settings(image: String?, username: String?, bio: String?, email: String?, password: String?): User {
-        return restClient.call<UserDto, UserDto>(
-            "$API_URL/user",
-            UserDto(User(image = image, username = username, bio = bio, email = email, password = password)),
-            HttpMethod.PUT,
+    suspend fun updateArticle(
+        slug: String,
+        title: String?,
+        description: String?,
+        body: String?,
+        tags: List<String>
+    ): Article {
+        return restClient.call<ArticleDto, ArticleDto>(
+            "$API_URL/articles/$slug",
+            ArticleDto(
+                Article(
+                    title = title,
+                    description = description,
+                    body = body,
+                    tagList = tags
+                )
+            ),
+            method = HttpMethod.PUT,
             beforeSend = ::authRequest
-        ).await().user
+        ).await().article
+    }
+
+    suspend fun deleteArticle(slug: String) {
+        restClient.remoteCall(
+            "$API_URL/articles/$slug",
+            method = HttpMethod.DELETE,
+            beforeSend = ::authRequest
+        ).await()
     }
 
 }

@@ -1,14 +1,13 @@
 package io.realworld.layout
 
-import io.realworld.Article
 import io.realworld.ConduitManager
-import io.realworld.ConduitState
+import io.realworld.model.Article
 import pl.treksoft.kvision.core.Container
 import pl.treksoft.kvision.html.*
 import pl.treksoft.kvision.types.toStringF
 import kotlin.js.Date
 
-fun Container.articlePreview(state: ConduitState, article: Article) {
+fun Container.articlePreview(article: Article) {
     div(className = "article-preview") {
         div(className = "article-meta") {
             val image =

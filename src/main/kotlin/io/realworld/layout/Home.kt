@@ -1,6 +1,8 @@
 package io.realworld.layout
 
 import io.realworld.ConduitState
+import io.realworld.layout.shared.pagination
+import io.realworld.layout.shared.tags
 import pl.treksoft.kvision.core.Container
 import pl.treksoft.kvision.html.div
 import pl.treksoft.kvision.html.h1
@@ -24,7 +26,7 @@ fun Container.homePage(state: ConduitState) {
                         div("Loading articles...", className = "article-preview")
                     } else if (!state.articles.isNullOrEmpty()) {
                         state.articles.forEach {
-                            articlePreview(state, it)
+                            articlePreview(it)
                         }
                         pagination(state)
                     } else {

@@ -1,9 +1,9 @@
-package io.realworld.layout
+package io.realworld.layout.articles
 
 import io.realworld.ConduitManager
 import io.realworld.ConduitState
 import io.realworld.View
-import io.realworld.marked
+import io.realworld.helpers.marked
 import pl.treksoft.kvision.core.Container
 import pl.treksoft.kvision.form.form
 import pl.treksoft.kvision.form.text.TextAreaInput
@@ -18,7 +18,7 @@ fun Container.article(state: ConduitState) {
             div(className = "banner") {
                 div(className = "container") {
                     h1(article.title)
-                    articleMeta(article)
+                    articleMeta(article, state)
                 }
             }
             div(className = "container page") {
@@ -36,7 +36,7 @@ fun Container.article(state: ConduitState) {
                 }
                 tag(TAG.HR)
                 div(className = "article-actions") {
-                    articleMeta(article)
+                    articleMeta(article, state)
                 }
                 div(className = "row") {
                     div(className = "col-xs-12 col-md-8 offset-md-2") {

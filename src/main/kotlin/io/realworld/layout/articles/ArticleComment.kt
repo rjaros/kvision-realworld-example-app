@@ -1,7 +1,7 @@
-package io.realworld.layout
+package io.realworld.layout.articles
 
-import io.realworld.Article
-import io.realworld.Comment
+import io.realworld.model.Article
+import io.realworld.model.Comment
 import io.realworld.ConduitManager
 import io.realworld.ConduitState
 import pl.treksoft.kvision.core.Container

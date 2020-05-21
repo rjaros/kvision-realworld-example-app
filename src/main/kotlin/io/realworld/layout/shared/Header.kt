@@ -1,4 +1,4 @@
-package io.realworld.layout
+package io.realworld.layout.shared
 
 import io.realworld.ConduitState
 import io.realworld.View

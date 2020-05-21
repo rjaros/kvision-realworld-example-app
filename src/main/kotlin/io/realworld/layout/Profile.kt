@@ -4,6 +4,7 @@ import io.realworld.ConduitManager
 import io.realworld.ConduitState
 import io.realworld.FeedType
 import io.realworld.View
+import io.realworld.layout.shared.pagination
 import pl.treksoft.kvision.core.Container
 import pl.treksoft.kvision.html.*
 
@@ -90,7 +91,7 @@ fun Container.profilePage(state: ConduitState) {
                             div("Loading articles...", className = "article-preview")
                         } else if (!state.articles.isNullOrEmpty()) {
                             state.articles.forEach {
-                                articlePreview(state, it)
+                                articlePreview(it)
                             }
                             pagination(state)
                         } else {

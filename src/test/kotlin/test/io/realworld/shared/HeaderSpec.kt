@@ -1,9 +1,8 @@
-package test.io.realworld
+package test.io.realworld.shared
 
 import io.realworld.ConduitState
-import io.realworld.User
-import io.realworld.View
-import io.realworld.layout.headerNav
+import io.realworld.model.User
+import io.realworld.layout.shared.headerNav
 import pl.treksoft.kvision.panel.Root
 import pl.treksoft.kvision.test.DomSpec
 import kotlin.test.Test
@@ -36,7 +35,11 @@ class HeaderSpec : DomSpec {
     fun headerForAuthorizedUserWithoutImageTest() {
         run {
             val root = Root("test")
-            root.headerNav(ConduitState(appLoading = false, user = User("test@gmail.com", username = "testuser")))
+            root.headerNav(ConduitState(appLoading = false, user = User(
+                "test@gmail.com",
+                username = "testuser"
+            )
+            ))
             val element = root.getElementJQuery()
             assertNotNull(element, "Generated content should not be empty")
             val links = element.find("a")
@@ -70,7 +73,11 @@ class HeaderSpec : DomSpec {
             val root = Root("test")
             root.headerNav(
                 ConduitState(appLoading = false,
-                    user = User("test@gmail.com", username = "testuser", image = "https://google.com")
+                    user = User(
+                        "test@gmail.com",
+                        username = "testuser",
+                        image = "https://google.com"
+                    )
                 )
             )
             val element = root.getElementJQuery()

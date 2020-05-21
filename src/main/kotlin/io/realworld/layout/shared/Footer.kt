@@ -1,4 +1,4 @@
-package io.realworld.layout
+package io.realworld.layout.shared
 
 import io.realworld.View
 import pl.treksoft.kvision.core.Container

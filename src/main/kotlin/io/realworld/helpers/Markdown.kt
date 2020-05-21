@@ -1,4 +1,4 @@
-package io.realworld
+package io.realworld.helpers
 
 import pl.treksoft.kvision.require
 

@@ -1,14 +1,14 @@
 package io.realworld
 
-import io.realworld.layout.article
-import io.realworld.layout.editorPage
-import io.realworld.layout.footer
-import io.realworld.layout.headerNav
+import io.realworld.layout.articles.article
+import io.realworld.layout.users.editorPage
+import io.realworld.layout.shared.footer
+import io.realworld.layout.shared.headerNav
 import io.realworld.layout.homePage
-import io.realworld.layout.loginPage
+import io.realworld.layout.users.loginPage
 import io.realworld.layout.profilePage
-import io.realworld.layout.registerPage
-import io.realworld.layout.settingsPage
+import io.realworld.layout.users.registerPage
+import io.realworld.layout.users.settingsPage
 import pl.treksoft.kvision.Application
 import pl.treksoft.kvision.html.header
 import pl.treksoft.kvision.html.main
@@ -21,9 +21,6 @@ import pl.treksoft.kvision.startApplication
 import pl.treksoft.kvision.state.bind
 
 class App : Application() {
-    init {
-        require("css/kvapp.css")
-    }
 
     override fun start() {
         Pace.init(require("pace-progressbar/themes/green/pace-theme-bounce.css"))
