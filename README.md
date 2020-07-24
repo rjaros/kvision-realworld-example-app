@@ -37,7 +37,7 @@ The project is build with Gradle Wrapper. Run Gradle build with `./gradlew` or `
 * `./gradlew -t run` - Starts a webpack dev server on port 3000. Open http://localhost:3000 in a browser.
 
 ### Packaging
-* `./gradlew -Pprod=true zip` - Packages a minified production version in a zip archive with all required files into `build/libs/*.zip`.
+* `./gradlew zip` - Packages a minified production version in a zip archive with all required files into `build/libs/*.zip`.
 
 ### Testing
 * `./gradlew test` - Run unit tests defined in `src/test/kotlin` source files. Test reports are generated into `build/reports/tests/test`.
