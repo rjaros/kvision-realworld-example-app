@@ -11,7 +11,7 @@ import org.w3c.dom.get
 import org.w3c.dom.set
 import pl.treksoft.kvision.redux.createReduxStore
 import pl.treksoft.navigo.Navigo
-import kotlin.browser.localStorage
+import kotlinx.browser.localStorage
 
 object ConduitManager : CoroutineScope by CoroutineScope(Dispatchers.Default + SupervisorJob()) {
 

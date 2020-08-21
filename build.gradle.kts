@@ -17,13 +17,6 @@ repositories {
     maven { url = uri("https://dl.bintray.com/kotlin/kotlin-eap") }
     maven { url = uri("https://kotlin.bintray.com/kotlinx") }
     maven { url = uri("https://dl.bintray.com/kotlin/kotlin-js-wrappers") }
-    maven {
-        url = uri("https://dl.bintray.com/gbaldeck/kotlin")
-        metadataSources {
-            mavenPom()
-            artifact()
-        }
-    }
     maven { url = uri("https://dl.bintray.com/rjaros/kotlin") }
     mavenLocal()
 }
@@ -36,10 +29,11 @@ val coroutinesVersion: String by project
 val webDir = file("src/main/web")
 
 kotlin {
-    target {
+    js {
         browser {
             runTask {
                 outputFileName = "main.bundle.js"
+                sourceMaps = false
                 devServer = KotlinWebpackConfig.DevServer(
                     open = false,
                     port = 3000,
@@ -47,7 +41,7 @@ kotlin {
                         "/kv/*" to "http://localhost:8080",
                         "/kvws/*" to mapOf("target" to "ws://localhost:8080", "ws" to true)
                     ),
-                    contentBase = listOf("$buildDir/processedResources/Js/main")
+                    contentBase = listOf("$buildDir/processedResources/js/main")
                 )
             }
             webpackTask {
@@ -61,13 +55,7 @@ kotlin {
         }
     }
     sourceSets["main"].dependencies {
-        implementation(kotlin("stdlib-js"))
-        implementation(npm("po2json"))
-        implementation(npm("grunt"))
-        implementation(npm("grunt-pot"))
-
         implementation(npm("marked", "^0.6.3"))
-
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:$coroutinesVersion")
         implementation("pl.treksoft:kvision:$kvisionVersion")
         implementation("pl.treksoft:kvision-redux-kotlin:$kvisionVersion")
@@ -81,7 +69,7 @@ kotlin {
 }
 
 fun getNodeJsBinaryExecutable(): String {
-    val nodeDir = NodeJsRootPlugin.apply(project).nodeJsSetupTask.destination
+    val nodeDir = NodeJsRootPlugin.apply(project).nodeJsSetupTaskProvider.get().destination
     val isWindows = System.getProperty("os.name").toLowerCase().contains("windows")
     val nodeBinDir = if (isWindows) nodeDir else nodeDir.resolve("bin")
     val command = NodeJsRootPlugin.apply(project).nodeCommand
@@ -90,39 +78,10 @@ fun getNodeJsBinaryExecutable(): String {
 }
 
 tasks {
-    create("generateGruntfile") {
-        outputs.file("$buildDir/js/Gruntfile.js")
-        doLast {
-            file("$buildDir/js/Gruntfile.js").run {
-                writeText(
-                    """
-                    module.exports = function (grunt) {
-                        grunt.initConfig({
-                            pot: {
-                                options: {
-                                    text_domain: "messages",
-                                    dest: "../../src/main/resources/i18n/",
-                                    keywords: ["tr", "ntr:1,2", "gettext", "ngettext:1,2"],
-                                    encoding: "UTF-8"
-                                },
-                                files: {
-                                    src: ["../../src/main/kotlin/**/*.kt"],
-                                    expand: true,
-                                },
-                            }
-                        });
-                        grunt.loadNpmTasks("grunt-pot");
-                    };
-                """.trimIndent()
-                )
-            }
-        }
-    }
     create("generatePotFile", Exec::class) {
-        dependsOn("compileKotlinJs", "generateGruntfile")
-        workingDir = file("$buildDir/js")
+        dependsOn("compileKotlinJs")
         executable = getNodeJsBinaryExecutable()
-        args("$buildDir/js/node_modules/grunt/bin/grunt", "pot")
+        args("$buildDir/js/node_modules/gettext-extract/bin/gettext-extract")
         inputs.files(kotlin.sourceSets["main"].kotlin.files)
         outputs.file("$projectDir/src/main/resources/i18n/messages.pot")
     }
@@ -139,11 +98,9 @@ afterEvaluate {
                     exec {
                         executable = getNodeJsBinaryExecutable()
                         args(
-                            "$buildDir/js/node_modules/po2json/bin/po2json",
+                            "$buildDir/js/node_modules/gettext.js/bin/po2json",
                             it.absolutePath,
-                            "${it.parent}/${it.nameWithoutExtension}.json",
-                            "-f",
-                            "jed1.x"
+                            "${it.parent}/${it.nameWithoutExtension}.json"
                         )
                         println("Converted ${it.name} to ${it.nameWithoutExtension}.json")
                     }
@@ -156,7 +113,7 @@ afterEvaluate {
             group = "package"
             destinationDirectory.set(file("$buildDir/libs"))
             val distribution =
-                project.tasks.getByName("browserProductionWebpack", KotlinWebpack::class).destinationDirectory!!
+                project.tasks.getByName("browserProductionWebpack", KotlinWebpack::class).destinationDirectory
             from(distribution) {
                 include("*.*")
             }
