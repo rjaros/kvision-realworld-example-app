@@ -3,19 +3,19 @@
 [![RealWorld Frontend](https://img.shields.io/badge/realworld-frontend-%23783578.svg)](http://realworld.io)
 ![CI](https://github.com/rjaros/kvision-realworld-example-app/workflows/CI/badge.svg)
 
-> ### [KVision](https://github.com/rjaros/kvision) codebase containing real world examples (CRUD, auth, advanced patterns, etc) that adheres to the [RealWorld](https://github.com/gothinkster/realworld) spec and API.
+> ### [KVision](https://kvision.io) codebase containing real world examples (CRUD, auth, advanced patterns, etc) that adheres to the [RealWorld](https://github.com/gothinkster/realworld) spec and API.
 
 ### [Demo](https://rjaros.github.io/kvision-realworld-example-app/)&nbsp;&nbsp;&nbsp;&nbsp;[RealWorld](https://github.com/gothinkster/realworld)
 
-This codebase was created to demonstrate a fully fledged fullstack application built with [KVision](https://github.com/rjaros/kvision) including CRUD operations, authentication, routing, pagination, and more.
+This codebase was created to demonstrate a fully fledged fullstack application built with [KVision](https://kvision.io) including CRUD operations, authentication, routing, pagination, and more.
 
-We've gone to great lengths to adhere to the [KVision](https://github.com/rjaros/kvision) community styleguides & best practices.
+We've gone to great lengths to adhere to the [KVision](https://kvision.io) community styleguides & best practices.
 
 For more information on how to this works with other frontends/backends, head over to the [RealWorld](https://github.com/gothinkster/realworld) repo.
 
 # How it works
 
-Created with [KVision](https://github.com/rjaros/kvision) and written in pure Kotlin/JS.
+Created with [KVision](https://kvision.io) and written in pure Kotlin/JS.
 
 This project is using [Redux Kotlin](https://reduxkotlin.org/) KVision module for state management.
 
