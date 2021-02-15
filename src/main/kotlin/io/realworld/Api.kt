@@ -2,10 +2,10 @@ package io.realworld
 
 import io.realworld.model.*
 import kotlinx.coroutines.await
-import pl.treksoft.jquery.JQueryAjaxSettings
-import pl.treksoft.jquery.JQueryXHR
-import pl.treksoft.kvision.rest.HttpMethod
-import pl.treksoft.kvision.rest.RestClient
+import io.kvision.jquery.JQueryAjaxSettings
+import io.kvision.jquery.JQueryXHR
+import io.kvision.rest.HttpMethod
+import io.kvision.rest.RestClient
 
 object Api {
 

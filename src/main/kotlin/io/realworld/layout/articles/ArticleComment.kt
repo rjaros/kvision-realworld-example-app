@@ -1,19 +1,18 @@
 package io.realworld.layout.articles
 
-import io.realworld.model.Article
-import io.realworld.model.Comment
+import io.kvision.core.Container
+import io.kvision.core.onClick
+import io.kvision.html.div
+import io.kvision.html.i
+import io.kvision.html.image
+import io.kvision.html.link
+import io.kvision.html.p
+import io.kvision.html.span
+import io.kvision.types.toStringF
 import io.realworld.ConduitManager
 import io.realworld.ConduitState
-import pl.treksoft.kvision.core.Container
-import pl.treksoft.kvision.core.onClick
-import pl.treksoft.kvision.html.TAG
-import pl.treksoft.kvision.html.div
-import pl.treksoft.kvision.html.image
-import pl.treksoft.kvision.html.link
-import pl.treksoft.kvision.html.p
-import pl.treksoft.kvision.html.span
-import pl.treksoft.kvision.html.tag
-import pl.treksoft.kvision.types.toStringF
+import io.realworld.model.Article
+import io.realworld.model.Comment
 import kotlin.js.Date
 
 fun Container.articleComment(state: ConduitState, comment: Comment, article: Article) {
@@ -33,7 +32,7 @@ fun Container.articleComment(state: ConduitState, comment: Comment, article: Art
             span(createdAtFormatted, className = "date-posted")
             if (state.user != null && state.user.username == comment.author?.username) {
                 span(className = "mod-options") {
-                    tag(TAG.I, className = "ion-trash-a").onClick {
+                    i(className = "ion-trash-a").onClick {
                         ConduitManager.articleCommentDelete(article.slug!!, comment.id!!)
                     }
                 }
