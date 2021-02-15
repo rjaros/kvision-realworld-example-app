@@ -10,7 +10,7 @@
 .classpath
 *.launch
 .settings/
-.*/
+.gradle/
 build/
 out/
 *.imp
